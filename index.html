@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mikiri — Trustworthy autonomy for the underwater world</title>
+<meta name="description" content="Mikiri is building a future where underwater robots can be trusted to work alone — machines that know what they know, explain what they did, and keep the ocean's hidden infrastructure alive.">
+<style>
+  :root{
+    --bg:#040e19; --bg2:#081a2e; --ink:#e9f1f8; --dim:#93abc2;
+    --accent:#38c8b8; --accent2:#5ea8ff; --warn:#ffb64d;
+    --card:#0c2540; --line:#1b3d5e; --deep:#02080f;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;overflow-x:hidden}
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(4,14,25,.82);backdrop-filter:blur(10px);border-bottom:1px solid transparent;transition:border-color .3s}
+  nav.scrolled{border-bottom-color:var(--line)}
+  .nav-inner{max-width:960px;margin:0 auto;padding:16px 24px;display:flex;justify-content:space-between;align-items:center}
+  .logo{font-size:1.15rem;font-weight:700;letter-spacing:.16em}
+  .logo span{color:var(--accent)}
+  .nav-links{display:flex;gap:22px}
+  .nav-links a{color:var(--dim);text-decoration:none;font-size:.85rem;letter-spacing:.04em;transition:color .2s}
+  .nav-links a:hover{color:var(--accent)}
+  @media(max-width:640px){.nav-links{display:none}}
+
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;position:relative;background:radial-gradient(ellipse at 70% 20%, #0c2b4a 0%, var(--bg) 55%)}
+  .hero .wrap{position:relative;z-index:2}
+  .kicker{color:var(--accent);font-size:.82rem;letter-spacing:.22em;text-transform:uppercase;margin-bottom:18px}
+  .hero h1{font-size:clamp(2rem,5.5vw,3.4rem);font-weight:680;line-height:1.18;max-width:840px}
+  .hero h1 em{color:var(--accent);font-style:normal}
+  .hero .sub{margin-top:24px;color:var(--dim);font-size:1.12rem;max-width:660px}
+  .cta-row{margin-top:36px;display:flex;gap:14px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:12px 26px;border-radius:8px;text-decoration:none;font-size:.95rem;font-weight:600;transition:transform .15s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn-primary{background:var(--accent);color:#03211d}
+  .btn-ghost{border:1px solid var(--line);color:var(--ink)}
+  .scroll-cue{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);color:var(--dim);font-size:.78rem;letter-spacing:.18em;animation:bob 2.2s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,8px)}}
+
+  .sonar{position:absolute;right:8%;top:22%;width:340px;height:340px;pointer-events:none;opacity:.5;z-index:1}
+  .sonar .ring{position:absolute;inset:0;border:1px solid var(--accent);border-radius:50%;animation:ping 4.5s linear infinite;opacity:0}
+  .sonar .ring:nth-child(2){animation-delay:1.5s}
+  .sonar .ring:nth-child(3){animation-delay:3s}
+  @keyframes ping{0%{transform:scale(.12);opacity:.75}80%{opacity:.12}100%{transform:scale(1);opacity:0}}
+  @media(max-width:760px){.sonar{display:none}}
+
+  section{padding:96px 0}
+  .sec-kicker{color:var(--accent);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px}
+  h2{font-size:clamp(1.5rem,3.4vw,2.2rem);font-weight:650;line-height:1.3;max-width:740px}
+  .lead{margin-top:18px;color:var(--dim);font-size:1.05rem;max-width:680px}
+  .lead em{color:var(--ink);font-style:normal}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease, transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:44px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 22px}
+  .stat .big{font-size:2rem;font-weight:700;color:var(--accent)}
+  .stat .lbl{font-size:.85rem;color:var(--dim);margin-top:6px}
+  .stat p{font-size:.88rem;color:var(--dim);margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+
+  .demo{background:var(--deep);border:1px solid var(--line);border-radius:16px;padding:34px;margin-top:48px}
+  .demo h3{font-size:1.05rem;margin-bottom:4px}
+  .demo .hint{font-size:.82rem;color:var(--dim);margin-bottom:26px}
+  .viewport{position:relative;height:210px;border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#0a3050 0%,#051828 100%);border:1px solid var(--line)}
+  .murk{position:absolute;inset:0;background:#48606e;opacity:0;transition:opacity .25s;pointer-events:none;mix-blend-mode:screen}
+  .weld{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;transition:filter .25s}
+  .weld .pipe{width:220px;height:44px;border-radius:8px;background:linear-gradient(180deg,#5c7387,#31465a);position:relative;margin:0 auto}
+  .weld .seam{position:absolute;left:50%;top:0;bottom:0;width:9px;transform:translateX(-50%);background:repeating-linear-gradient(45deg,#8ca4b8 0 4px,#54677a 4px 8px)}
+  .weld .crack{position:absolute;left:calc(50% + 22px);top:8px;color:var(--warn);font-size:1.1rem}
+  .weld .cap{font-size:.72rem;color:var(--dim);margin-top:10px;letter-spacing:.08em}
+  .sonar-overlay{position:absolute;inset:0;opacity:0;transition:opacity .3s;pointer-events:none;
+    background:
+     repeating-radial-gradient(circle at 50% 120%, transparent 0 26px, rgba(56,200,184,.10) 26px 27px),
+     linear-gradient(180deg, rgba(56,200,184,.05), transparent)}
+  .scanline{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--accent),transparent);opacity:0;animation:scan 2.6s linear infinite}
+  @keyframes scan{0%{top:0}100%{top:100%}}
+
+  .controls{margin-top:24px}
+  .controls label{font-size:.85rem;color:var(--dim);display:block;margin-bottom:10px}
+  input[type=range]{width:100%;accent-color:var(--accent);cursor:pointer}
+  .trust-row{display:grid;grid-template-columns:110px 1fr 52px;gap:12px;align-items:center;margin-top:16px;font-size:.85rem}
+  .bar{height:10px;border-radius:5px;background:#12293f;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:5px;transition:width .25s, background .25s}
+  #camBar i{background:var(--accent2)}
+  #sonBar i{background:var(--accent)}
+  .decision{margin-top:22px;background:var(--card);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:14px 18px;font-size:.9rem;min-height:74px}
+  .decision .dlabel{font-size:.7rem;letter-spacing:.16em;color:var(--dim);text-transform:uppercase}
+  .decision .dmsg{margin-top:5px}
+  .decision .dmsg strong{color:var(--accent)}
+  .decision.warn{border-left-color:var(--warn)}
+  .decision.warn .dmsg strong{color:var(--warn)}
+
+  .layers{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:18px;margin-top:44px}
+  .layer{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:28px;transition:transform .2s, border-color .2s}
+  .layer:hover{transform:translateY(-4px);border-color:var(--accent)}
+  .layer .num{font-size:.75rem;color:var(--accent);letter-spacing:.16em}
+  .layer h3{margin:10px 0 10px;font-size:1.12rem}
+  .layer p{font-size:.92rem;color:var(--dim)}
+
+  .strip{background:var(--deep);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .strip .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;padding-top:70px;padding-bottom:70px}
+  .strip h4{color:var(--accent);font-size:.95rem;margin-bottom:8px}
+  .strip p{font-size:.9rem;color:var(--dim)}
+
+  .vision-quote{margin-top:52px;padding:38px 40px;background:linear-gradient(135deg,#0c2540,#0a3050);border:1px solid var(--line);border-radius:16px;font-size:clamp(1.05rem,2.4vw,1.35rem);line-height:1.6;max-width:820px}
+  .vision-quote em{color:var(--accent);font-style:normal}
+  .vision-quote .who{display:block;margin-top:18px;font-size:.82rem;color:var(--dim);letter-spacing:.08em}
+
+  .contact-box{background:linear-gradient(135deg,#0c2540,#0a3050);border:1px solid var(--line);border-radius:16px;padding:48px 40px;text-align:center;margin-top:44px}
+  .contact-box h3{font-size:1.4rem}
+  .contact-box p{color:var(--dim);margin:14px auto 26px;max-width:520px}
+  footer{padding:34px 0 44px;font-size:.8rem;color:var(--dim);border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="logo">MIKI<span>RI</span></div>
+    <div class="nav-links">
+      <a href="#problem">Why</a>
+      <a href="#demo">A glimpse</a>
+      <a href="#beliefs">What we believe</a>
+      <a href="#future">The future</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="sonar"><div class="ring"></div><div class="ring"></div><div class="ring"></div></div>
+  <div class="wrap">
+    <div class="kicker">Subsea Autonomy · United Kingdom</div>
+    <h1>The modern world runs on machines nobody can see.<br>Someone has to <em>look after them</em>.</h1>
+    <p class="sub">Beneath the surface sit the wind farms, cables, and pipelines that power economies and carry the internet. Mikiri exists so that keeping them alive no longer depends on sending people into one of the most hostile workplaces on Earth.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#demo">A glimpse of what we mean</a>
+      <a class="btn btn-ghost" href="#contact">Talk to us</a>
+    </div>
+  </div>
+  <div class="scroll-cue">SCROLL ↓</div>
+</header>
+
+<section id="problem">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-kicker">Chapter 1 — The problem we chose</div>
+      <h2>The ocean is the last place we still don't trust machines to work alone.</h2>
+      <p class="lead">On land and in the air, robots have earned their independence. Underwater, almost nothing has changed in decades: ships full of people, a pilot for every robot, and costs so punishing that critical infrastructure gets inspected less often than it should. Not because nobody built underwater robots — but because nobody has made them <em>trustworthy enough to be left alone</em>.</p>
+    </div>
+    <div class="stats">
+      <div class="stat reveal"><div class="big">70%</div><div class="lbl">of the planet, effectively offline</div><p>No GPS, no radio, no video feeds. The rules that make land and aerial autonomy possible simply don't apply down there.</p></div>
+      <div class="stat reveal"><div class="big">1 : 1</div><div class="lbl">humans per robot, still</div><p>Every underwater robot working today has a person holding its hand — usually several, on a ship, at extraordinary cost.</p></div>
+      <div class="stat reveal"><div class="big">↑</div><div class="lbl">and the stakes keep rising</div><p>More offshore wind, more subsea cables, more attention on protecting them. The gap between what needs watching and who can watch it grows every year.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="demo" style="padding-top:20px">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-kicker">Chapter 2 — A glimpse</div>
+      <h2>What does it mean for a machine to earn trust?</h2>
+      <p class="lead">Here's a small taste. The sea rarely cooperates — silt rises, light dies, and a machine that blindly believes its cameras becomes a liability. A machine worth trusting notices its own senses failing, adapts before it gets lost, and can tell you afterwards exactly what it did and why. Drag the slider and watch that idea in motion.</p>
+    </div>
+    <div class="demo reveal">
+      <h3>Interactive: a machine that knows what it knows</h3>
+      <div class="hint">Slider = water clarity. Watch its view, its confidence in each sense, and how it explains itself.</div>
+      <div class="viewport">
+        <div class="weld" id="weld">
+          <div class="pipe"><div class="seam"></div><div class="crack" id="crack">⚠</div></div>
+          <div class="cap">A STRUCTURE WORTH LOOKING AFTER</div>
+        </div>
+        <div class="sonar-overlay" id="sonarOverlay"></div>
+        <div class="scanline" id="scanline"></div>
+        <div class="murk" id="murk"></div>
+      </div>
+      <div class="controls">
+        <label>Water: <span id="turbLabel">clear</span></label>
+        <input type="range" id="turb" min="0" max="100" value="10">
+        <div class="trust-row"><span>Sight</span><div class="bar" id="camBar"><i style="width:95%"></i></div><span id="camVal">high</span></div>
+        <div class="trust-row"><span>Sound</span><div class="bar" id="sonBar"><i style="width:60%"></i></div><span id="sonVal">med</span></div>
+        <div class="decision" id="decision">
+          <div class="dlabel">The machine, explaining itself</div>
+          <div class="dmsg" id="dmsg"><strong>ALL CLEAR.</strong> Seeing well. Continuing the inspection, noting everything worth a second look.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="beliefs" style="padding-top:20px">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-kicker">Chapter 3 — What we believe</div>
+      <h2>Trust isn't a feature. It's the whole product.</h2>
+      <p class="lead">We're not building another underwater robot — the world has plenty. We're building the thing the industry has been missing: the confidence to let them work. Four convictions guide everything we make.</p>
+    </div>
+    <div class="layers">
+      <div class="layer reveal">
+        <div class="num">BELIEF 01</div>
+        <h3>A machine should know what it knows</h3>
+        <p>Certainty underwater is a lie. Machines that admit their doubt — about what they see, where they are, what they found — make better decisions than machines that pretend.</p>
+      </div>
+      <div class="layer reveal">
+        <div class="num">BELIEF 02</div>
+        <h3>Every decision should survive questioning</h3>
+        <p>"The system decided" is not an answer an operator, an insurer, or a navy will ever accept. Anything our machines do can be replayed, examined, and explained — after any mission, to anyone accountable.</p>
+      </div>
+      <div class="layer reveal">
+        <div class="num">BELIEF 03</div>
+        <h3>Humans command, machines labour</h3>
+        <p>Autonomy isn't the absence of people — it's the promotion of people. One person orchestrating many machines, asked for judgement at the moments that matter, never chained to a joystick.</p>
+      </div>
+      <div class="layer reveal">
+        <div class="num">BELIEF 04</div>
+        <h3>The brain matters more than the body</h3>
+        <p>The world already builds capable underwater vehicles. What they're missing is a mind worthy of them. We build minds, and partner for the rest.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap">
+    <div class="reveal"><h4>Clean energy that tends itself</h4><p>Offshore wind is becoming the backbone of national grids — hundreds of structures per farm, standing in violent water, needing constant attention.</p></div>
+    <div class="reveal"><h4>The internet's hidden body</h4><p>Nearly everything you've ever sent online crossed the seabed. The cables and pipelines down there deserve better than an occasional glance.</p></div>
+    <div class="reveal"><h4>A seabed worth defending</h4><p>Nations have woken up to how exposed their underwater infrastructure is. Watching over it is becoming a matter of security, not just maintenance.</p></div>
+  </div>
+</div>
+
+<section id="future">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-kicker">Chapter 4 — The future we're building toward</div>
+      <h2>Infrastructure that is never unwatched.</h2>
+      <p class="lead">Imagine a wind farm where machines live among the turbines, quietly keeping vigil — surfacing findings, not footage. A cable route inspected continuously instead of occasionally. A single operator, anywhere in the world, entrusting a whole fleet with the night shift. That future isn't blocked by hardware. It's blocked by trust — and trust is precisely what we're engineering.</p>
+      <div class="vision-quote reveal">
+        "One day, sending a crewed ship to look at a weld will sound as strange as sending a person up a mast to check a lightbulb. <em>The ocean's machines will look after the ocean's machines.</em> We're building the minds that make that safe."
+        <span class="who">— THE IDEA MIKIRI IS BUILT ON</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="padding-top:20px">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="sec-kicker">Chapter 5 — Build it with us</div>
+      <div class="contact-box">
+        <h3>We're early — deliberately quiet, and looking for the people who feel this problem.</h3>
+        <p>Operators who know the cost of every vessel day. Vehicle makers who want their platforms trusted with more. Engineers, researchers, and early believers who think the underwater world deserves better. If that's you, we'd like to talk.</p>
+        <a class="btn btn-primary" href="mailto:info@mikiri.co.uk">info@mikiri.co.uk</a>
+      </div>
+    </div>
+    <footer>
+      <div>© 2026 Mikiri Ltd · Registered in England &amp; Wales</div>
+      <div>Trustworthy autonomy for the underwater world.</div>
+    </footer>
+  </div>
+</section>
+
+<script>
+const nav = document.getElementById('nav');
+addEventListener('scroll', () => nav.classList.toggle('scrolled', scrollY > 30));
+
+const io = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+}), {threshold: .18});
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+const turb = document.getElementById('turb');
+const murk = document.getElementById('murk');
+const weld = document.getElementById('weld');
+const sonarOverlay = document.getElementById('sonarOverlay');
+const scanline = document.getElementById('scanline');
+const camBar = document.querySelector('#camBar i');
+const sonBar = document.querySelector('#sonBar i');
+const camVal = document.getElementById('camVal');
+const sonVal = document.getElementById('sonVal');
+const dmsg = document.getElementById('dmsg');
+const decision = document.getElementById('decision');
+const turbLabel = document.getElementById('turbLabel');
+
+function level(x){ return x > .7 ? 'high' : x > .4 ? 'med' : 'low'; }
+
+function update() {
+  const t = +turb.value / 100;
+  const cam = Math.max(0.05, 0.95 - t * 1.05);
+  const son = Math.min(0.92, 0.60 + t * 0.34);
+
+  murk.style.opacity = (t * 0.85).toFixed(2);
+  weld.style.filter = 'blur(' + (t * 7).toFixed(1) + 'px)';
+  const sonarMode = cam < 0.45;
+  sonarOverlay.style.opacity = sonarMode ? 0.9 : 0;
+  scanline.style.opacity = sonarMode ? 0.8 : 0;
+
+  camBar.style.width = (cam * 100) + '%';
+  sonBar.style.width = (son * 100) + '%';
+  camVal.textContent = level(cam);
+  sonVal.textContent = level(son);
+  camBar.style.background = cam < 0.45 ? 'var(--warn)' : 'var(--accent2)';
+
+  turbLabel.textContent = t < .25 ? 'clear' : t < .5 ? 'silt rising' : t < .75 ? 'murky' : 'near blind';
+
+  if (cam >= 0.7) {
+    decision.classList.remove('warn');
+    dmsg.innerHTML = '<strong>ALL CLEAR.</strong> Seeing well. Continuing the inspection, noting everything worth a second look.';
+  } else if (cam >= 0.45) {
+    decision.classList.add('warn');
+    dmsg.innerHTML = '<strong>DOUBT CREEPING IN.</strong> My eyes are getting worse and I know it. Leaning on my other senses before I lose my bearings — and making a note of the moment I did.';
+  } else if (cam >= 0.2) {
+    decision.classList.add('warn');
+    dmsg.innerHTML = '<strong>WORKING BY SOUND.</strong> I can no longer trust what I see, so I\'ve stopped believing it. The work continues — and my operator knows exactly what changed.';
+  } else {
+    decision.classList.add('warn');
+    dmsg.innerHTML = '<strong>KNOWING WHEN TO STOP.</strong> Conditions have beaten every sense I have. I\'m holding safely clear, asking my human what they\'d like me to do — with a full account of how we got here.';
+  }
+}
+turb.addEventListener('input', update);
+update();
+</script>
+</body>
+</html>
