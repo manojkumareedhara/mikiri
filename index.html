@@ -150,7 +150,6 @@
   <div class="nav-inner">
     <a class="logo" href="#top">MIKI<span>RI</span></a>
     <div class="nav-links">
-      <a href="#top" class="active" aria-current="page">Home</a>
       <a href="#why">The problem</a>
       <a href="#demo">How it works</a>
       <a href="#different">What we build</a>
@@ -301,7 +300,7 @@
 <script>
 /* active section highlighting */
 const navAnchors = [...document.querySelectorAll('.nav-links a')];
-const targets = ['home','why','demo','different','future','contact'].map(id => document.getElementById(id));
+const targets = ['why','demo','different','future','contact'].map(id => document.getElementById(id));
 function setActiveNav(id) {
   navAnchors.forEach(a => {
     const active = a.getAttribute('href') === '#' + id;
@@ -314,7 +313,7 @@ if ('IntersectionObserver' in window) {
   const spy = new IntersectionObserver(es => {
     es.forEach(e => {
       if (!e.isIntersecting) return;
-      setActiveNav(e.target.id === 'home' ? 'top' : e.target.id);
+      setActiveNav(e.target.id);
     });
   }, {rootMargin: '-45% 0px -50% 0px'});
   targets.forEach(t => t && spy.observe(t));
