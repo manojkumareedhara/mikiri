@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>mikiri</title>
-<meta name="description" content="Mikiri is building reliable perception and decision-making software for autonomous close inspection of offshore wind foundations on third-party underwater vehicles.">
+<meta name="description" content="Mikiri builds the intelligence that lets underwater vehicles work alone: systems that know their limits, explain their actions, and earn the trust to operate where no one can watch.">
 <style>
   :root{
     --bg:#040e19; --ink:#e9f1f8; --dim:#93abc2;
@@ -65,9 +65,10 @@
 
   /* facts: editorial rows, no cards */
   .facts{margin-top:56px;max-width:760px}
-  .fact{display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:baseline;padding:30px 0}
+  .fact{display:grid;grid-template-columns:150px 1fr;gap:28px;align-items:baseline;padding:30px 0 30px 20px;margin-left:-20px;border-left:2px solid transparent;transition:border-color .25s}
+  .fact:hover{border-left-color:var(--accent)}
   .fact + .fact{border-top:1px solid rgba(27,61,94,.5)}
-  .fact .big{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;color:var(--accent);line-height:1.1}
+  .fact .big{font-size:clamp(1.8rem,4vw,2.6rem);font-weight:700;color:var(--accent);line-height:1.1;font-variant-numeric:tabular-nums}
   .fact h3{font-size:1rem;margin-bottom:6px}
   .fact p{font-size:.93rem;color:var(--dim)}
   @media(max-width:560px){.fact{grid-template-columns:1fr;gap:8px}}
@@ -75,6 +76,7 @@
   /* demo */
   .demo{background:var(--deep);border:1px solid var(--line);border-radius:18px;padding:34px;margin-top:48px;box-shadow:0 20px 60px rgba(0,0,0,.35)}
   .demo h3{font-size:1.05rem;margin-bottom:4px}
+  .badge{display:inline-block;margin-left:8px;padding:2px 9px;border-radius:999px;background:rgba(56,200,184,.15);color:var(--accent);font-size:.62rem;letter-spacing:.12em;vertical-align:middle;font-weight:600}
   .demo .hint{font-size:.82rem;color:var(--dim);margin-bottom:26px}
   .viewport{position:relative;height:210px;border-radius:12px;overflow:hidden;background:linear-gradient(180deg,#0a3050 0%,#051828 100%);border:1px solid var(--line)}
   .murk{position:absolute;inset:0;background:#48606e;opacity:0;transition:opacity .25s;pointer-events:none;mix-blend-mode:screen}
@@ -111,9 +113,11 @@
 
   /* difference: numbered editorial, no cards */
   .diffs{margin-top:56px;max-width:760px}
-  .diff{position:relative;padding:34px 0 34px 92px}
+  .diff{position:relative;padding:34px 20px 34px 92px;border-radius:12px;transition:background-color .25s}
+  .diff:hover{background:rgba(56,200,184,.05)}
+  .diff:hover .ghost{-webkit-text-stroke-color:var(--accent2);opacity:.9}
   .diff + .diff{border-top:1px solid rgba(27,61,94,.5)}
-  .diff .ghost{position:absolute;left:0;top:26px;font-size:2.6rem;font-weight:800;color:transparent;-webkit-text-stroke:1px var(--accent);opacity:.65;line-height:1}
+  .diff .ghost{position:absolute;left:0;top:26px;font-size:2.6rem;font-weight:800;color:transparent;-webkit-text-stroke:1px var(--accent);opacity:.65;line-height:1;transition:opacity .25s, -webkit-text-stroke-color .25s}
   .diff h3{font-size:1.15rem;margin-bottom:8px}
   .diff p{font-size:.95rem;color:var(--dim);max-width:620px}
   @media(max-width:560px){.diff{padding-left:0;padding-top:70px}.diff .ghost{top:22px}}
@@ -121,16 +125,18 @@
   /* strip */
   .strip{background:var(--deep)}
   .strip .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:34px;padding-top:70px;padding-bottom:70px}
+  .strip .wrap > div{padding-top:18px;border-top:1px solid var(--line);transition:border-color .25s, transform .25s}
+  .strip .wrap > div:hover{border-color:var(--accent);transform:translateY(-3px)}
   .strip h3{color:var(--accent);font-size:.95rem;margin-bottom:8px}
   .strip p{font-size:.9rem;color:var(--dim)}
 
   /* vision */
-  .vision-quote{margin-top:52px;padding:38px 40px;background:linear-gradient(135deg,#0c2540,#0a3050);border-radius:18px;font-size:clamp(1.05rem,2.4vw,1.35rem);line-height:1.6;max-width:820px}
+  .vision-quote{margin-top:52px;padding:38px 40px;background:linear-gradient(135deg,#0c2540,#0a3050);border-left:3px solid var(--accent);border-radius:0 18px 18px 0;font-size:clamp(1.05rem,2.4vw,1.35rem);line-height:1.6;max-width:820px}
   .vision-quote em{color:var(--accent);font-style:normal}
   .vision-quote .who{display:block;margin-top:18px;font-size:.82rem;color:var(--dim);letter-spacing:.08em}
 
   /* contact */
-  .contact-box{background:linear-gradient(135deg,#0c2540,#0a3050);border-radius:18px;padding:48px 40px;text-align:center;margin-top:44px}
+  .contact-box{background:linear-gradient(135deg,#0c2540,#0a3050);border:1px solid var(--line);border-radius:18px;padding:48px 40px;text-align:center;margin-top:44px}
   .contact-box h3{font-size:1.4rem}
   .contact-box p{color:var(--dim);margin:14px auto 26px;max-width:520px}
   .contact-email{color:var(--accent);text-decoration:none;border:none;font-size:1rem;font-weight:600}
@@ -150,10 +156,10 @@
   <div class="nav-inner">
     <a class="logo" href="/">MIKI<span>RI</span></a>
     <div class="nav-links">
-      <a href="#why">The problem</a>
-      <a href="#demo">How it works</a>
-      <a href="#different">What we build</a>
-      <a href="#future">First mission</a>
+      <a href="#why">The challenge</a>
+      <a href="#demo">Our approach</a>
+      <a href="#different">Why Mikiri</a>
+      <a href="#future">Vision</a>
       <a href="#contact">Contact</a>
     </div>
   </div>
@@ -163,11 +169,11 @@
   <canvas id="sea" aria-hidden="true"></canvas>
   <div class="wrap">
     <div class="kicker">Subsea Autonomy · United Kingdom</div>
-    <h1>The modern world runs on machines nobody can see.<br>Someone has to <em>look after them</em>.</h1>
-    <p class="sub">Mikiri is building on-vehicle software for third-party underwater vehicles to inspect offshore wind foundations. It is designed to turn uncertain sensor data into reliable observations, safe plans, and an auditable record of every decision.</p>
+    <h1>The <em>intelligence</em> the ocean has been missing.</h1>
+    <p class="sub">Underwater vehicles have never been more capable. What they lack is the judgment to be trusted alone. Mikiri builds that missing layer: intelligence that turns a piloted machine into a dependable one, steady when senses fail and answerable for every action it takes.</p>
     <div class="cta-row">
-      <a class="btn btn-primary" href="#demo">Explore the depths</a>
-      <a class="btn btn-ghost" href="#contact">Talk to us</a>
+      <a class="btn btn-primary" href="#demo">See the demonstration</a>
+      <a class="btn btn-ghost" href="#contact">Get in touch</a>
     </div>
   </div>
   <div class="scroll-cue">SCROLL ↓</div>
@@ -177,14 +183,14 @@
 <section id="why">
   <div class="wrap">
     <div class="reveal">
-      <div class="sec-kicker">The problem</div>
-      <h2>Underwater vehicles exist. The confidence to rely on them does not.</h2>
-      <p class="lead">Underwater vehicles can dive deeper, operate for longer, and carry better sensors than ever. Yet most still require close human supervision. The challenge is not only vehicle capability; it is whether a vehicle can make safe, verifiable decisions when sensors and communications degrade.</p>
+      <div class="sec-kicker">The challenge</div>
+      <h2>Underwater vehicles exist. The intelligence to trust them does not.</h2>
+      <p class="lead">Modern vehicles dive deeper, run longer, and see more than ever. Almost every one is still driven by hand from the surface, because the limiting factor was never the hardware. It's whether a machine can make a safe, explainable decision on its own, in a place where signals fade and senses fail.</p>
     </div>
     <div class="facts">
-      <div class="fact reveal d1"><div class="big">71%</div><div><h3>of Earth's surface is ocean</h3><p>GPS signals do not reach underwater, communications are slow and unreliable, and live video cannot normally be streamed. A vehicle must make safe decisions on its own.</p></div></div>
-      <div class="fact reveal d2"><div class="big">1 : 1</div><div><h3>one pilot for each vehicle, today</h3><p>Close supervision can require people and vessels at significant cost. That model limits how often subsea infrastructure can be inspected.</p></div></div>
-      <div class="fact reveal d3"><div class="big">↑</div><div><h3>the need for inspection is growing</h3><p>Offshore wind, subsea cables, and other critical assets are expanding. The gap between what needs inspection and the people available to do it is widening.</p></div></div>
+      <div class="fact reveal d1"><div class="big">71%</div><div><h3>of Earth's surface is ocean</h3><p>Satellite navigation and radio stop at the waterline. What's left is a thin acoustic link that carries a handful of messages, never video. Below that line, a machine has to think for itself.</p></div></div>
+      <div class="fact reveal d2"><div class="big">1 : 1</div><div><h3>one pilot for each vehicle, today</h3><p>Teleoperation is still the industry norm: a trained pilot, a support crew, and a vessel for every vehicle deployed. That model caps how much of the ocean floor ever gets seen.</p></div></div>
+      <div class="fact reveal d3"><div class="big">↑</div><div><h3>the backlog is growing, not shrinking</h3><p>Offshore wind, power and data cables, and other critical assets are expanding faster than the workforce that inspects them. The gap widens every year.</p></div></div>
     </div>
   </div>
 </section>
@@ -192,17 +198,17 @@
 <section id="demo" style="padding-top:20px">
   <div class="wrap">
     <div class="reveal">
-      <div class="sec-kicker">How Mikiri works</div>
-      <h2>Reliable perception. Auditable decisions.</h2>
-      <p class="lead">Underwater conditions change without warning. Silt is stirred up, light fades, and sensors become unreliable. Mikiri is building a perception layer that preserves uncertainty and a decision layer that plans around it. A rule-based safety supervisor can veto unsafe actions, while defined cases are passed to a human for authorisation. Every observation and decision is logged so a mission can be understood and replayed afterwards.</p>
+      <div class="sec-kicker">Our approach</div>
+      <h2>Senses fail first. Judgment doesn't.</h2>
+      <p class="lead">Conditions in the deep change without warning: silt rises, light fails, and what a machine can see collapses in seconds. Good judgment means noticing your own senses failing, adjusting before the work is compromised, and keeping a complete, reviewable record of every action taken. Adjust the slider to see the principle in motion.</p>
     </div>
     <div class="demo reveal d1">
-      <h3>Interactive illustration: responding to changing conditions</h3>
-      <div class="hint" id="demoHint">Move the slider to change water clarity. Camera and sonar are example inputs; this illustrates how Mikiri tracks sensor trust, adapts a plan, and records why it acts.</div>
+      <h3>Interactive demonstration <span class="badge">Live</span></h3>
+      <div class="hint" id="demoHint">Adjust the water clarity and observe how the system responds as conditions change.</div>
       <div class="viewport">
         <div class="weld" id="weld">
           <div class="pipe"><div class="seam"></div><div class="crack" id="crack">⚠</div></div>
-          <div class="cap">A STRUCTURE WORTH LOOKING AFTER</div>
+          <div class="cap">STRUCTURE UNDER INSPECTION</div>
         </div>
         <div class="sonar-overlay" id="sonarOverlay" aria-hidden="true"></div>
         <div class="scanline" id="scanline" aria-hidden="true"></div>
@@ -211,11 +217,11 @@
       <div class="controls">
         <label for="turb">Water clarity: <span id="turbLabel">clear</span></label>
         <input type="range" id="turb" min="0" max="100" value="10" aria-describedby="demoHint" aria-valuetext="clear water">
-        <div class="trust-row"><span>Camera</span><div class="bar" id="camBar" aria-hidden="true"><i style="width:95%"></i></div><span id="camVal">high</span></div>
-        <div class="trust-row"><span>Sonar</span><div class="bar" id="sonBar" aria-hidden="true"><i style="width:60%"></i></div><span id="sonVal">medium</span></div>
+        <div class="trust-row"><span>Vision</span><div class="bar" id="camBar" aria-hidden="true"><i style="width:95%"></i></div><span id="camVal">high</span></div>
+        <div class="trust-row"><span>Acoustic</span><div class="bar" id="sonBar" aria-hidden="true"><i style="width:60%"></i></div><span id="sonVal">medium</span></div>
         <div class="decision" id="decision" role="status" aria-live="polite" aria-atomic="true">
-          <div class="dlabel">Decision record</div>
-          <div class="dmsg" id="dmsg"><strong>VISION RELIABLE.</strong> Continuing the inspection and recording any finding that needs a second look.</div>
+          <div cla#ss="dlabel">Decision record</div>
+          <div class="dmsg" id="dmsg"><strong>VISIBILITY GOOD.</strong> Inspection proceeding as planned. Findings are recorded for review.</div>
         </div>
       </div>
     </div>
@@ -225,30 +231,30 @@
 <section id="different" style="padding-top:20px">
   <div class="wrap">
     <div class="reveal">
-      <div class="sec-kicker">What we build</div>
-      <h2>Software that works across compatible underwater vehicles.</h2>
-      <p class="lead">Mikiri is building software that integrates with third-party underwater vehicles. Its perception layer is designed to produce observations with uncertainty and provenance; its decision, safety, and audit layers will plan inspections, enforce safety rules, and record why each action was taken.</p>
+      <div class="sec-kicker">Why Mikiri</div>
+      <h2>Others build vehicles. We build the intelligence to trust them.</h2>
+      <p class="lead">The industry keeps improving the body: better cameras, bigger batteries, stronger thrusters. Yet nobody lets these machines out of sight, because when conditions deteriorate they falter, and afterward nobody can say quite why. We started from the question every operator actually asks: <em>can I count on this thing?</em> Everything we build is an answer to it.</p>
     </div>
     <div class="diffs">
       <div class="diff reveal d1">
         <div class="ghost">01</div>
-        <h3>Uncertainty is made explicit.</h3>
-        <p>The system is designed to track sensor quality and preserve uncertainty with each observation, responding conservatively as confidence declines.</p>
+        <h3>Aware of its own limits</h3>
+        <p>In the deep, certainty is rare. A system that understands how far to believe its own senses, and becomes more careful as conditions worsen, makes better decisions than one that assumes the best.</p>
       </div>
       <div class="diff reveal d2">
         <div class="ghost">02</div>
-        <h3>Decisions are designed to be inspectable.</h3>
-        <p>The system is designed to record the observations, plan, safety rules, and actions behind each decision. Operators will be able to inspect and replay what happened after a mission.</p>
+        <h3>Accountable by design</h3>
+        <p>"The system decided" satisfies no operator, insurer, or navy. After any mission, what the system did and why can be examined by anyone accountable. That is the difference between a demonstration and something you deploy.</p>
       </div>
       <div class="diff reveal d3">
         <div class="ghost">03</div>
-        <h3>People remain in authority.</h3>
-        <p>People will supervise the mission rather than pilot continuously. The system is designed to ask for authorisation at defined moments, while the operator can pause, abort, or surface the vehicle at any time.</p>
+        <h3>People retain command</h3>
+        <p>Autonomy should elevate people, not remove them. Operators supervise rather than pilot, are consulted at the moments that matter, and hold the final word at all times.</p>
       </div>
       <div class="diff reveal d4">
         <div class="ghost">04</div>
-        <h3>Software that integrates across vehicles.</h3>
-        <p>Vehicle-specific details are isolated so the core Mikiri software can integrate with compatible third-party vehicles rather than competing on hulls, thrusters, or sensor hardware.</p>
+        <h3>Built to integrate, not compete</h3>
+        <p>The world already builds excellent vehicles. We make them dependable, working alongside the people who build them rather than competing on hulls and thrusters.</p>
       </div>
     </div>
   </div>
@@ -256,18 +262,18 @@
 
 <section class="strip" aria-label="Potential applications">
   <div class="wrap">
-    <div class="reveal d1"><h3>Offshore wind foundations</h3><p>The first mission is close inspection of monopile welds, anodes, and cable entries under human supervision.</p></div>
-    <div class="reveal d2"><h3>Subsea cables and pipelines</h3><p>Later applications may include cable and pipeline inspection, using the same core software with mission-specific rules.</p></div>
-    <div class="reveal d3"><h3>Critical subsea infrastructure</h3><p>Reliable inspection helps operators protect the infrastructure that supports energy, communications, and security.</p></div>
+    <div class="reveal d1"><h3>Offshore wind</h3><p>Wind farms are becoming the backbone of national grids: hundreds of structures per farm, standing in demanding waters, requiring constant attention.</p></div>
+    <div class="reveal d2"><h3>Subsea cables and pipelines</h3><p>Nearly all international data and much of the world's energy crosses the seabed. The assets that carry them deserve more than an occasional glance.</p></div>
+    <div class="reveal d3"><h3>Infrastructure security</h3><p>Nations increasingly recognise how exposed this infrastructure is. Watching over it is becoming a matter of security, not only maintenance.</p></div>
   </div>
 </section>
 
 <section id="future">
   <div class="wrap">
     <div class="reveal">
-      <div class="sec-kicker">First mission: offshore wind</div>
-      <h2>Close inspection without a crewed support vessel for every vehicle.</h2>
-      <p class="lead">The initial focus is supervised autonomous close inspection of offshore wind foundations: monopile welds, anodes, and cable entries. The aim is to make one vehicle more efficient under human supervision. The same architecture is designed to support multiple vehicles later, without requiring a person to pilot each one continuously.</p>
+      <div class="sec-kicker">Vision</div>
+      <h2>An ocean that is never unwatched.</h2>
+      <p class="lead">Imagine wind farms where machines live among the turbines, quietly keeping vigil and surfacing findings, not footage. Cable routes checked continuously instead of occasionally. A single operator, anywhere in the world, entrusting a whole fleet with the night shift. That future is not blocked by hardware. It is blocked by confidence, and confidence is precisely what we are engineering.</p>
       <div class="vision-quote reveal d1">
         <em>The ocean's machines will look after the ocean's machines.</em> We're building the intelligence.
         <span class="who">~ Mikiri</span>
@@ -279,10 +285,10 @@
 <section id="contact" style="padding-top:20px">
   <div class="wrap">
     <div class="reveal">
-      <div class="sec-kicker">Build it with us</div>
+      <div class="sec-kicker">Contact</div>
       <div class="contact-box">
-        <h3>We want to hear from people who know this problem first-hand.</h3>
-        <p>We would like to speak with offshore operators, underwater-vehicle makers, engineers, researchers, and others working to make subsea inspection safer and more efficient.</p>
+        <h3>Working on this problem? We should talk.</h3>
+        <p>We welcome conversations with offshore operators, vehicle manufacturers, engineers, and researchers working to make operations below the surface safer and more efficient.</p>
         <a class="contact-email" href="mailto:contact@mikiri.co.uk">contact@mikiri.co.uk</a>
       </div>
     </div>
@@ -293,7 +299,7 @@
 <footer>
   <div class="wrap">
     <div>© 2026 Mikiri Ltd · Registered in England &amp; Wales</div>
-    <div>Trustworthy autonomy for the underwater world.</div>
+    <div>Intelligence for the world below the surface.</div>
   </div>
 </footer>
 
@@ -394,16 +400,16 @@ function update() {
 
   if (cam >= 0.7) {
     decision.classList.remove('warn');
-    dmsg.innerHTML = '<strong>VISION RELIABLE.</strong> Continuing the inspection and recording any finding that needs a second look.';
+    dmsg.innerHTML = '<strong>VISIBILITY GOOD.</strong> Inspection proceeding as planned. Findings are recorded for review.';
   } else if (cam >= 0.45) {
     decision.classList.add('warn');
-    dmsg.innerHTML = '<strong>CAMERA CONFIDENCE FALLING.</strong> Re-weighting the available sensor data and recording the change in conditions.';
+    dmsg.innerHTML = '<strong>VISIBILITY DEGRADING.</strong> Confidence in vision is falling. Adapting before accuracy is affected, and recording the change in conditions.';
   } else if (cam >= 0.2) {
     decision.classList.add('warn');
-    dmsg.innerHTML = '<strong>SONAR-PRIMARY INSPECTION.</strong> Camera data is no longer reliable. Replanning around sonar and recording the reason for the change.';
+    dmsg.innerHTML = '<strong>OPERATING BY SOUND.</strong> Visual data is no longer dependable and has been set aside. The inspection continues, and the operator is informed of the change.';
   } else {
     decision.classList.add('warn');
-    dmsg.innerHTML = '<strong>SAFE HOLD.</strong> Camera data is too poor to verify the inspection. Holding position at a safe standoff and requesting human authorisation, with a full decision record.';
+    dmsg.innerHTML = '<strong>HOLDING SAFELY.</strong> Conditions are below safe working thresholds. The vehicle holds clear of the structure and awaits operator instruction, with a complete account of events.';
   }
 }
 turb.addEventListener('input', update);
