@@ -8,7 +8,7 @@
 <style>
   :root{
     --bg:#040e19; --ink:#e9f1f8; --dim:#93abc2;
-    --accent:#38c8b8; --accent2:#5ea8ff; --warn:#ffb64d;
+    --accent:#38c8b8; --accent2:#5ea8ff; --warn:#ffb64d; --danger:#ff5c5c;
     --card:#0c2540; --line:#1b3d5e; --deep:#02080f;
   }
   *{margin:0;padding:0;box-sizing:border-box}
@@ -105,6 +105,8 @@
   .decision .dmsg strong{color:var(--accent)}
   .decision.warn{border-left-color:var(--warn)}
   .decision.warn .dmsg strong{color:var(--warn)}
+  .decision.danger{border-left-color:var(--danger)}
+  .decision.danger .dmsg strong{color:var(--danger)}
   @media(max-width:400px){
     .demo{padding:20px}
     .trust-row{grid-template-columns:70px 1fr 42px;gap:8px}
@@ -218,7 +220,7 @@
         <label for="turb">Water clarity: <span id="turbLabel">clear</span></label>
         <input type="range" id="turb" min="0" max="100" value="10" aria-describedby="demoHint" aria-valuetext="clear water">
         <div class="trust-row"><span>Vision</span><div class="bar" id="camBar" aria-hidden="true"><i style="width:95%"></i></div><span id="camVal">high</span></div>
-        <div class="trust-row"><span>Acoustic</span><div class="bar" id="sonBar" aria-hidden="true"><i style="width:60%"></i></div><span id="sonVal">medium</span></div>
+        <div class="trust-row"><span>Confidence in acoustics</span><div class="bar" id="sonBar" aria-hidden="true"><i style="width:60%"></i></div><span id="sonVal">medium</span></div>
         <div class="decision" id="decision" role="status" aria-live="polite" aria-atomic="true">
           <div cla#ss="dlabel">Decision record</div>
           <div class="dmsg" id="dmsg"><strong>VISIBILITY GOOD.</strong> Inspection proceeding as planned. Findings are recorded for review.</div>
@@ -244,12 +246,12 @@
       <div class="diff reveal d2">
         <div class="ghost">02</div>
         <h3>Accountable by design</h3>
-        <p>"The system decided" satisfies no operator, insurer, or navy. After any mission, what the system did and why can be examined by anyone accountable. That is the difference between a demonstration and something you deploy.</p>
+        <p>"The system decided" satisfies no operator, insurer, or navy. After any mission, what the system did and why, can be examined by anyone accountable. That is the difference between a demonstration and something you deploy.</p>
       </div>
       <div class="diff reveal d3">
         <div class="ghost">03</div>
-        <h3>People retain command</h3>
-        <p>Autonomy should elevate people, not remove them. Operators supervise rather than pilot, are consulted at the moments that matter, and hold the final word at all times.</p>
+        <h3>Humans retain command</h3>
+        <p>Autonomy should elevate humans, not remove them. Operators supervise rather than pilot. They are consulted at the moments that matter, and they hold the final word, always.</p>
       </div>
       <div class="diff reveal d4">
         <div class="ghost">04</div>
@@ -273,7 +275,7 @@
     <div class="reveal">
       <div class="sec-kicker">Vision</div>
       <h2>An ocean that is never unwatched.</h2>
-      <p class="lead">Imagine wind farms where machines live among the turbines, quietly keeping vigil and surfacing findings, not footage. Cable routes checked continuously instead of occasionally. A single operator, anywhere in the world, entrusting a whole fleet with the night shift. That future is not blocked by hardware. It is blocked by confidence, and confidence is precisely what we are engineering.</p>
+      <p class="lead">Imagine wind farms where machines live among the turbines, quietly keeping vigil and surfacing findings, not footage. Cable routes checked continuously instead of occasionally. A single operator, anywhere in the world, entrusting a whole fleet with the night shift. That future is not blocked by hardware. It is blocked by trust, and trust is precisely what we are engineering.</p>
       <div class="vision-quote reveal d1">
         <em>The ocean's machines will look after the ocean's machines.</em> We're building the intelligence.
         <span class="who">~ Mikiri</span>
@@ -287,7 +289,7 @@
     <div class="reveal">
       <div class="sec-kicker">Contact</div>
       <div class="contact-box">
-        <h3>Working on this problem? We should talk.</h3>
+        <h3>Working on this problem? Let's talk.</h3>
         <p>We welcome conversations with offshore operators, vehicle manufacturers, engineers, and researchers working to make operations below the surface safer and more efficient.</p>
         <a class="contact-email" href="mailto:contact@mikiri.co.uk">contact@mikiri.co.uk</a>
       </div>
@@ -398,8 +400,8 @@ function update() {
   turbLabel.textContent = t < .25 ? 'clear' : t < .5 ? 'silt rising' : t < .75 ? 'murky' : 'very poor visibility';
   turb.setAttribute('aria-valuetext', 'Water clarity: ' + turbLabel.textContent);
 
+  decision.classList.remove('warn', 'danger');
   if (cam >= 0.7) {
-    decision.classList.remove('warn');
     dmsg.innerHTML = '<strong>VISIBILITY GOOD.</strong> Inspection proceeding as planned. Findings are recorded for review.';
   } else if (cam >= 0.45) {
     decision.classList.add('warn');
@@ -408,7 +410,7 @@ function update() {
     decision.classList.add('warn');
     dmsg.innerHTML = '<strong>OPERATING BY SOUND.</strong> Visual data is no longer dependable and has been set aside. The inspection continues, and the operator is informed of the change.';
   } else {
-    decision.classList.add('warn');
+    decision.classList.add('danger');
     dmsg.innerHTML = '<strong>HOLDING SAFELY.</strong> Conditions are below safe working thresholds. The vehicle holds clear of the structure and awaits operator instruction, with a complete account of events.';
   }
 }
